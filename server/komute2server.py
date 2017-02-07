@@ -1,17 +1,22 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from booligetter import BooliGetter
+from dummybooligetter import DummyBooliGetter
 from gmdurationgetter import GMDurationGetter
 import datetime
 import urllib
 
 class Komute2Server:
     def __init__(self, listings_getter, duration_getter):
-        self.app = Flask(__name__, static_url_path='')
+        self.app = Flask(__name__)
         self.duration_getter = duration_getter
         self.listings_getter = listings_getter
         self.add_routes()
 
     def add_routes(self):
+        @self.app.route("/")
+        def index():
+            return send_file("templates/index.html")
+
         @self.app.route('/api/listings', methods = ['GET'])
         def get_listings():
             booliurl = urllib.unquote(request.query_string)
@@ -30,7 +35,7 @@ class Komute2Server:
         self.app.run()
 
 if __name__ == "__main__":
-    booli_getter = BooliGetter()
+    booli_getter = DummyBooliGetter()
     duration_getter = GMDurationGetter()
     restfulServer = Komute2Server(booli_getter, duration_getter)
     restfulServer.start_server()

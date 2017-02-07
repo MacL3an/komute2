@@ -21,6 +21,7 @@ class GMDurationGetter:
         return self.query_google_maps(url, params)
 
     def query_google_maps(self, url, params):
+        return randint(100, 1000)
         attempts = 0
         success = False
         while success != True and attempts < 4:
