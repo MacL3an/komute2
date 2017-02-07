@@ -31,3 +31,9 @@ myApp.controller('durationController', function($scope, $http) {
             $scope.duration = response.data["duration"];
         });
     });
+
+myApp.filter('secondsToDateTime', function() {
+    return function(seconds) {
+        return new Date(0, 0, 0).setSeconds(seconds);
+    };
+});

@@ -15,7 +15,7 @@
             <td>{{listing.rooms}}</td>
             <td>{{listing.livingArea}}</td>
             <td>{{listing.listPrice}}</td>
-            <td ng-controller="durationController">{{duration}}</td>
+            <td ng-controller="durationController">{{ duration | secondsToDateTime | date:'HH:mm:ss' }}</td>
         </tr>
     </tbody>
 </table>
