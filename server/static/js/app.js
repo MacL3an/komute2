@@ -20,11 +20,14 @@ myApp.controller('listingsController', function($scope, $http) {
         then(function(response) {
             $scope.listings = response.data["listings"];
         });
-});
+    });
 
 myApp.controller('durationController', function($scope, $http) {
-    $http.get('http://localhost:5000/api/duration?origin=Karlaplan%20T-bana,%20Sweden&destination=G%C3%A4rdet%20T-bana,%20Sweden').
+    var origin = $scope.listing.location.position.latitude + "," + $scope.listing.location.position.longitude;
+    var destination = "Sveavägen 25, Sweden";
+    var url = '/api/duration?origin='+origin+'&destination='+destination
+    $http.get(url).
         then(function(response) {
             $scope.duration = response.data["duration"];
         });
-});
+    });
