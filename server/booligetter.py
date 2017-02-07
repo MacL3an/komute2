@@ -7,49 +7,47 @@ import urlparse
 import re
 import json
 
-def GetData(args):
-    callerId = "MacL3an"
-    timestamp = str(int(time.time()))
-    unique = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(16))
-    hashstr = sha1(callerId+timestamp+"LWfD8NBtmLVFnusBZURfhgABvnu3JpvhslQEWNvR"+unique).hexdigest()
+class BooliGetter:
+    def __init__(self, callerId = "MacL3an", key = "LWfD8NBtmLVFnusBZURfhgABvnu3JpvhslQEWNvR"):
+        self.callerId = callerId
+        self.key = key
 
-    #url = "/listings?q="+area+"&callerId="+callerId+"&time="+timestamp+"&unique="+unique+"&hash="+hashstr
+    def perform_query(self, args):
+        timestamp = str(int(time.time()))
+        unique = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(16))
+        hashstr = sha1(self.callerId + timestamp + self.key + unique).hexdigest()
 
-    url = 'http://api.booli.se/listings'
-    args["hash"] = hashstr
-    args["time"] = timestamp
-    args["unique"]=unique
-    args["callerId"]=callerId
+        #url = "/listings?q="+area+"&callerId="+callerId+"&time="+timestamp+"&unique="+unique+"&hash="+hashstr
 
-    response = requests.get(url=url, params=args)
+        url = 'http://api.booli.se/listings'
+        args["hash"] = hashstr
+        args["time"] = timestamp
+        args["unique"]=unique
+        args["callerId"]=self.callerId
 
-    if response.status_code != 200:
-        raise Exception("failed getting data from Booli")
+        response = requests.get(url=url, params=args)
 
-    return response.text
-#    f = open('boolidata.txt', 'w')
-#    f.write(data)
-#    f.close
+        if response.status_code != 200:
+            raise Exception("failed getting data from Booli")
 
-def QueryBooli():
-    url = "http://www.booli.se/kristineberg/874669/?objectType=l%C3%A4genhet&rooms=2"
-    areaIds = re.sub('^booli.*\n', '', url)
-    parsedurl = urlparse.urlparse(url)
-    areas = parsedurl.path.split('/')
-    areaNames = areas[1]
-    areaIds = areas[2]
-    args = urlparse.parse_qs(parsedurl.query)
-    args['areaId'] = areaIds
+        return response.text
 
-    #filename = 'boolidata.txt'
-    #f = open(filename)
-    #data = json.load(f)
+    def parse_url(self, url):
+        parsedurl = urlparse.urlparse(url)
+        areas = parsedurl.path.split('/')
+        areaIds = areas[2]
+        args = urlparse.parse_qs(parsedurl.query)
+        args['areaId'] = areaIds
+        return args
 
-    boolidata = GetData(args)
-    data = json.loads(boolidata)
-    listings = data["listings"]
-    print listings
-    return listings
+    def get_listings(self, url = "http://www.booli.se/kristineberg/874669/?objectType=l%C3%A4genhet&rooms=2"):
+        args = self.parse_url(url)
+
+        result = self.perform_query(args)
+        data = json.loads(result)
+        listings = data["listings"]
+        return listings
 
 if __name__ == '__main__':
-    print GetData();
+    booliGetter = BooliGetter()
+    print booliGetter.get_listings()

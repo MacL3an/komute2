@@ -1,25 +1,37 @@
 import unittest
-
-import booligetter
+import json
+from booligetter import BooliGetter
 import gmdurationgetter
-import komute2server
+from komute2server import Komute2Server
+from gmdurationgetter import GMDurationGetter
 
 class MyTestCase(unittest.TestCase):
 
     def setUp(self):
-        restfulServer = komute2server.Komute2Server(gmdurationgetter, booligetter)
+        listings_getter = BooliGetter()
+        listings_getter.get_listings = self.dummy_listing_data
+        duration_getter = GMDurationGetter()
+        duration_getter.query_google_maps = lambda url,params: 100
+        restfulServer = Komute2Server(listings_getter, duration_getter)
         self.app = restfulServer.app.test_client()
         # propagate the exceptions to the test client
         self.app.testing = True
 
-    def test_empty_db(self):
-        print "testing"
-        rv = self.app.get('/api/listings')
-        print rv.data
+    def test_get_listings(self):
+        result = self.app.get('/api/listings?https://www.booli.se/karlaplan/149545/')
+        self.assertEqual(result.status_code, 200)
+        listings = json.loads(result.data)
+        self.assertEqual(len(listings["listings"]), 2)
 
-    def dummy_listing_data(self):
-        return """{
-          "listings": [
+    def test_duration(self):
+        origin = "Fyrisgrand 13, Bagarmossen"
+        destination = "Sveavagen 42, Stockholm"
+        result = self.app.get('/api/duration?origin='+origin+'&destination='+destination)
+        result_as_json = json.loads(result.data)
+        self.assertEquals(result_as_json["duration"], 100)
+
+    def dummy_listing_data(self, *args):
+        test = json.loads("""[
             {
               "booliId": 2253361,
               "constructionYear": 1929,
@@ -89,8 +101,8 @@ class MyTestCase(unittest.TestCase):
               },
               "url": "https://www.booli.se/annons/2177621"
             }
-          ]
-        }"""
+          ]""")
+        return test
 
 
 if __name__ == '__main__':
