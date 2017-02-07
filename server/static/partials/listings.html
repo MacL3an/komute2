@@ -1,0 +1,23 @@
+<h2>Listings:</h2>
+
+<div>
+    <table ng-controller="listingsController" border="1">
+    <thead>
+        <th>Address</th>
+        <th>Rooms</th>
+        <th>Size</th>
+        <th>Price</th>
+        <th>Duration</th>
+    </thead>
+    <tbody ng-repeat="listing in listings">
+        <tr>
+            <td>{{listing.location.address.streetAddress}}</td>
+            <td>{{listing.rooms}}</td>
+            <td>{{listing.livingArea}}</td>
+            <td>{{listing.listPrice}}</td>
+            <td ng-controller="durationController">{{duration}}</td>
+        </tr>
+    </tbody>
+</table>
+
+</div>
