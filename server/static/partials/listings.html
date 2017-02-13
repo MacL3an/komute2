@@ -1,6 +1,5 @@
 
 <div>
-    <h3>Options:</h3>
     <form>
         <div ng-controller="booliUrlController">
             <div class="form-group">
@@ -28,11 +27,13 @@
     </thead>
     <tbody ng-repeat="listing in listings | orderBy:'duration'">
         <tr>
-            <td>{{listing.location.address.streetAddress}}</td>
+            <td><a href="{{listing.url}}" target="_blank">{{listing.location.address.streetAddress}}</a></td>
             <td>{{listing.rooms}}</td>
             <td>{{listing.livingArea}}</td>
             <td>{{listing.listPrice}}</td>
-            <td ng-controller="durationController">{{ listing.duration | secondsToDateTime | date:'HH:mm:ss' }}</td>
+            <td ng-controller="durationController">{{ listing.duration ?
+                (listing.duration | secondsToDateTime | date:'HH:mm:ss')
+                : '' }}</td>
         </tr>
     </tbody>
 </table>
