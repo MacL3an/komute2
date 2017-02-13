@@ -16,15 +16,17 @@ myApp.config(['$routeProvider',
     }]);
 
 myApp.controller('booliUrlController', function($rootScope, $scope) {
-        $scope.booliUrl = "https://www.booli.se/karlaplan/149545/"
+        $scope.booliUrl = "https://www.booli.se/karlaplan/149545/";
+        $scope.workAddress = "Sveavägen 25, Stockholm";
         $scope.getListings = function() {
-            $rootScope.$emit('newBooliUrl', $scope.booliUrl);
+            $rootScope.$emit('newBooliUrl', $scope.booliUrl, $scope.workAddress);
         }
     });
 
 myApp.controller('listingsController', function($rootScope, $scope, $http) {
-    $rootScope.$on('newBooliUrl', function(event, data) {
-        loadListings(data);
+    $rootScope.$on('newBooliUrl', function(event, url, address) {
+        $scope.address = address;
+        loadListings(url);
     });
 
     var loadListings = function(url) {
@@ -37,8 +39,7 @@ myApp.controller('listingsController', function($rootScope, $scope, $http) {
 
 myApp.controller('durationController', function($scope, $http) {
     var origin = $scope.listing.location.position.latitude + "," + $scope.listing.location.position.longitude;
-    var destination = "Sveavägen 25, Sweden";
-    var url = '/api/duration?origin='+origin+'&destination='+destination
+    var url = '/api/duration?origin='+origin+'&destination='+$scope.address
     $http.get(url).
         then(function(response) {
             $scope.duration = response.data["duration"];

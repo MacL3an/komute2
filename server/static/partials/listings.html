@@ -1,11 +1,21 @@
 
 <div>
-    <h3>Paste Booli URL here:</h3>
-    <div ng-controller="booliUrlController" class="form-group">
-        <input type="text" value="test" ng-model="booliUrl" class="col-xs-4"/>
-        <input type="button" ng-click="getListings()" value="Show listings" ng-disabled="booliUrl == null"/>
-    </div>
-
+    <h3>Options:</h3>
+    <form>
+        <div ng-controller="booliUrlController">
+            <div class="form-group">
+                <label for="booliUrl">Booli URL: </label>
+                <input id="booliUrl" class="form-control" type="text" ng-model="booliUrl" class="col-xs-4">
+            </div>
+            <div class="form-group">
+                <label>Work address: </label>
+                <input type="text" class="form-control" ng-model="workAddress" class="col-xs-4">
+            </div>
+            <div class="form-group">
+                <input type="button" ng-click="getListings()" value="Show listings" ng-disabled="booliUrl == null">
+            </div>
+        </div>
+    </form>
     <h3>Listings:</h3>
 
     <table ng-controller="listingsController"  class="table table-striped">
