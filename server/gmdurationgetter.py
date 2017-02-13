@@ -5,7 +5,6 @@ import requests
 import json
 import time
 import datetime
-from random import randint
 
 class GMDurationGetter:
     def get_duration(self, origin = "Brooklyn", destination = "Queens", departure_time = datetime.datetime.now()):
@@ -21,7 +20,6 @@ class GMDurationGetter:
         return self.query_google_maps(url, params)
 
     def query_google_maps(self, url, params):
-        return randint(100, 1000)
         attempts = 0
         success = False
         while success != True and attempts < 4:

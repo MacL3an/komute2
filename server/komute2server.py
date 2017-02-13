@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file
 from booligetter import BooliGetter
 from dummybooligetter import DummyBooliGetter
 from gmdurationgetter import GMDurationGetter
+from dummydurationgetter import DummyDurationGetter
 import datetime
 import urllib
 
@@ -35,7 +36,9 @@ class Komute2Server:
         self.app.run()
 
 if __name__ == "__main__":
+    #booli_getter = BooliGetter()
+    #duration_getter = GMDurationGetter()
     booli_getter = DummyBooliGetter()
-    duration_getter = GMDurationGetter()
+    duration_getter = DummyDurationGetter()
     restfulServer = Komute2Server(booli_getter, duration_getter)
     restfulServer.start_server()
