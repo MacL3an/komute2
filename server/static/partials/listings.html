@@ -26,13 +26,13 @@
         <th>Price</th>
         <th>Duration</th>
     </thead>
-    <tbody ng-repeat="listing in listings">
+    <tbody ng-repeat="listing in listings | orderBy:'duration'">
         <tr>
             <td>{{listing.location.address.streetAddress}}</td>
             <td>{{listing.rooms}}</td>
             <td>{{listing.livingArea}}</td>
             <td>{{listing.listPrice}}</td>
-            <td ng-controller="durationController">{{ duration | secondsToDateTime | date:'HH:mm:ss' }}</td>
+            <td ng-controller="durationController">{{ listing.duration | secondsToDateTime | date:'HH:mm:ss' }}</td>
         </tr>
     </tbody>
 </table>

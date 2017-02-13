@@ -42,7 +42,7 @@ myApp.controller('durationController', function($scope, $http) {
     var url = '/api/duration?origin='+origin+'&destination='+$scope.address
     $http.get(url).
         then(function(response) {
-            $scope.duration = response.data["duration"];
+            $scope.listing.duration = response.data["duration"];
     });
 });
 

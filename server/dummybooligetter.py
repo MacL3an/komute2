@@ -75,6 +75,40 @@ class DummyBooliGetter(BooliGetter):
                 "url": "http://www.edwardpartners.se/"
               },
               "url": "https://www.booli.se/annons/2177621"
+            },
+            {
+              "booliId": 1234,
+              "constructionYear": 2016,
+              "floor": 5,
+              "listPrice": 5000000,
+              "livingArea": 100,
+              "location": {
+                "address": {
+                  "streetAddress": "Testgata 1"
+                },
+                "namedAreas": [
+                  "Kungsholmen"
+                ],
+                "position": {
+                  "latitude": 59.34049523,
+                  "longitude": 18.00779643
+                },
+                "region": {
+                  "countyName": "Stockholms l\u00e4n",
+                  "municipalityName": "Stockholm"
+                }
+              },
+              "objectType": "L\u00e4genhet",
+              "published": "2017-02-03 22:11:11",
+              "rent": 2871,
+              "rooms": 3,
+              "source": {
+                "id": 410,
+                "name": "Edward & Partners Fastighetsm\u00e4klare AB",
+                "type": "Broker",
+                "url": "http://www.edwardpartners.se/"
+              },
+              "url": "https://www.booli.se/annons/2177621"
             }
           ]""")
         return test
