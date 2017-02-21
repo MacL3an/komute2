@@ -16,7 +16,7 @@ myApp.config(['$routeProvider',
     }]);
 
 myApp.controller('booliUrlController', function($rootScope, $scope) {
-        $scope.booliUrl = "https://www.booli.se/karlaplan/149545/";
+        $scope.booliUrl = "https://www.booli.se/soderort/914052/?objectType=Parhus%2CRadhus%2CKedjehus&rooms=4";
         $scope.workAddress = "Sveavägen 25, Stockholm";
         $scope.getListings = function() {
             console.log($scope.booliUrl);
