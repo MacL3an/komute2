@@ -7,8 +7,12 @@ import time
 import datetime
 
 class GMDurationGetter:
-    def get_duration(self, origin = "Brooklyn", destination = "Queens", departure_time = datetime.datetime.now()):
+    def get_duration(self, origin = "Brooklyn", destination = "Queens", departure_time = None):
         url = 'http://maps.googleapis.com/maps/api/directions/json'
+
+        if departure_time is None:
+            departure_time = self.get_next_monday_morning()
+            print departure_time
 
         params = dict(
             mode='transit',
@@ -18,6 +22,13 @@ class GMDurationGetter:
         )
 
         return self.query_google_maps(url, params)
+
+    def get_next_monday_morning(self):
+        d = datetime.date.today()
+        while (d.weekday() != 0):
+            d += datetime.timedelta(1)
+
+        return datetime.datetime(d.year, d.month, d.day, 8, 0)
 
     def query_google_maps(self, url, params):
         attempts = 0
@@ -45,4 +56,4 @@ class GMDurationGetter:
 
 if __name__ == '__main__':
     gm_duration_getter = GMDurationGetter()
-    print gm_duration_getter.get_duration("Fyrisgrand 13, Bagarmossen", "Sveavagen 42, Stockholm", datetime.datetime(2016, 8, 1, 8, 0));
+    print gm_duration_getter.get_duration("Fyrisgrand 13, Bagarmossen", "Sveavagen 42, Stockholm", datetime.datetime(2017, 2, 20, 8, 0));

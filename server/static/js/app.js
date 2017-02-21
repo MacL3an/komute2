@@ -31,7 +31,7 @@ myApp.controller('listingsController', function($rootScope, $scope, $http) {
     });
 
     var loadListings = function(url) {
-        $http.get('http://localhost:5000/api/listings?'+url).
+        $http.get('/api/listings?'+url).
         then(function(response) {
             $scope.listings = response.data["listings"];
         });

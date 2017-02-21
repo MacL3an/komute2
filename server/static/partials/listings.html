@@ -17,25 +17,24 @@
     </form>
     <h3>Listings:</h3>
 
-    <table ng-controller="listingsController"  class="table table-striped">
-    <thead>
-        <th>Address</th>
-        <th>Rooms</th>
-        <th>Size</th>
-        <th>Price</th>
-        <th>Duration</th>
-    </thead>
-    <tbody ng-repeat="listing in listings | orderBy:'duration'">
-        <tr>
-            <td><a href="{{listing.url}}" target="_blank">{{listing.location.address.streetAddress}}</a></td>
-            <td>{{listing.rooms}}</td>
-            <td>{{listing.livingArea}}</td>
-            <td>{{listing.listPrice}}</td>
-            <td ng-controller="durationController">{{ listing.duration ?
-                (listing.duration | secondsToDateTime | date:'HH:mm:ss')
-                : '' }}</td>
-        </tr>
-    </tbody>
-</table>
-
+    <table class="table" ng-controller="listingsController">
+        <thead>
+            <th>Address</th>
+            <th>Rooms</th>
+            <th>Size</th>
+            <th>Price</th>
+            <th>Duration</th>
+        </thead>
+        <tbody ng-repeat="listing in listings | orderBy:'duration'" ng-class-odd="'striped'">
+            <tr>
+                <td><a href="{{listing.url}}" target="_blank">{{listing.location.address.streetAddress}}</a></td>
+                <td>{{listing.rooms}}</td>
+                <td>{{listing.livingArea}}</td>
+                <td>{{listing.listPrice}}</td>
+                <td ng-controller="durationController">{{ listing.duration ?
+                    (listing.duration | secondsToDateTime | date:'HH:mm:ss')
+                    : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>

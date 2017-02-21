@@ -28,12 +28,11 @@ class Komute2Server:
         def get_duration():
             origin = request.args.get('origin')
             destination = request.args.get('destination')
-            time = datetime.datetime(2017,2,6,8,0)
-            duration = self.duration_getter.get_duration(origin, destination, time);
+            duration = self.duration_getter.get_duration(origin, destination);
             return jsonify({'duration': duration})
 
     def start_server(self):
-        self.app.run()
+        self.app.run(host='0.0.0.0')
 
 if __name__ == "__main__":
     #booli_getter = BooliGetter()
