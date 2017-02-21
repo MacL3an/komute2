@@ -28,7 +28,8 @@ class Komute2Server:
         def get_duration():
             origin = request.args.get('origin')
             destination = request.args.get('destination')
-            duration = self.duration_getter.get_duration(origin, destination);
+            transitType = request.args.get('transitType')
+            duration = self.duration_getter.get_duration(origin, destination, transitType);
             return jsonify({'duration': duration})
 
     def start_server(self):

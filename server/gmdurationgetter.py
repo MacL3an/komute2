@@ -7,7 +7,7 @@ import time
 import datetime
 
 class GMDurationGetter:
-    def get_duration(self, origin = "Brooklyn", destination = "Queens", departure_time = None):
+    def get_duration(self, origin = "Brooklyn", destination = "Queens", mode='transit', departure_time = None):
         url = 'http://maps.googleapis.com/maps/api/directions/json'
 
         if departure_time is None:
@@ -15,7 +15,7 @@ class GMDurationGetter:
             print departure_time
 
         params = dict(
-            mode='transit',
+            mode=mode,
             origin=origin,
             destination=destination,
             departure_time=departure_time.strftime('%s')

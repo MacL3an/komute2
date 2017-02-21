@@ -18,15 +18,29 @@ myApp.config(['$routeProvider',
 myApp.controller('booliUrlController', function($rootScope, $scope) {
         $scope.booliUrl = "https://www.booli.se/soderort/914052/?objectType=Parhus%2CRadhus%2CKedjehus&rooms=4";
         $scope.workAddress = "Sveavägen 25, Stockholm";
+        $scope.transitTypes = [{
+                Id: 'transit',
+                Name: 'Public Transport'
+            }, {
+                Id: 'bicycle',
+                Name: 'Bicycle'
+            }, {
+                Id: 'walking',
+                Name: 'Walking'
+            }, {
+                Id: 'driving',
+                Name: 'Driving'
+            }];
+        $scope.transitType = $scope.transitTypes[0].Id;
         $scope.getListings = function() {
-            console.log($scope.booliUrl);
-            $rootScope.$emit('newBooliUrl', $scope.booliUrl, $scope.workAddress);
+            $rootScope.$emit('getListings', $scope.booliUrl, $scope.workAddress, $scope.transitType);
         }
     });
 
 myApp.controller('listingsController', function($rootScope, $scope, $http) {
-    $rootScope.$on('newBooliUrl', function(event, url, address) {
+    $rootScope.$on('getListings', function(event, url, address, transitType) {
         $scope.destinationAddress = address;
+        $scope.transitType = transitType;
         loadListings(url);
     });
 
@@ -40,7 +54,7 @@ myApp.controller('listingsController', function($rootScope, $scope, $http) {
 
 myApp.controller('durationController', function($scope, $http) {
     var origin = $scope.listing.location.position.latitude + "," + $scope.listing.location.position.longitude;
-    var url = '/api/duration?origin='+origin+'&destination='+$scope.destinationAddress
+    var url = '/api/duration?origin='+origin+'&destination='+$scope.destinationAddress+'&transitType='+$scope.transitType
     $http.get(url).
         then(function(response) {
             $scope.listing.duration = response.data["duration"];
