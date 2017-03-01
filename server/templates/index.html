@@ -2,16 +2,16 @@
 <html>
     <head>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-        <link rel="stylesheet" href="/static/css/styles.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
-		<script src="http://code.angularjs.org/1.5.3/angular-route.min.js"></script>
-		<script src="/static/js/app.js"></script>
+        <script src="https://unpkg.com/react@latest/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@latest/dist/react-dom.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+		<script src="/static/js/app.js" type="text/babel"></script>
     </head>
 
-    <body ng-app="myApp">
+    <body>
+        <h1>Komute2</h1>
+        <p>This page shows the commuting time for each Booli listing to your work address.</p>
 
-				<h1>Komute2</h1>
-                <p>This page shows the commuting time for each Booli listing to your work address.</p>
-			 <div ng-view></div>
+        <div id="root"></div>
     </body>
 </html>
