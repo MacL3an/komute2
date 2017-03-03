@@ -38,33 +38,17 @@ class ListingRow extends React.Component{
                 <td>{rooms}</td>
                 <td>{size}</td>
                 <td>{price}</td>
-                {<DurationCell origin={origin} destination="Sveavägen 25, Stockholm" transitType="transit"/>}
+                {<DurationCell origin={origin} destination={this.props.destination} transitType="transit"/>}
             </tr>
         );
     }
 }
 
 class ListingsTable extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            listings: []
-        };
-    }
-
-    componentDidMount() {
-        var apiAddress = "api/listings?https://www.booli.se/soderort/914052/?objectType=Parhus%2CRadhus%2CKedjehus&rooms=4";
-        this.serverRequest = $.get(apiAddress, function(result) {
-            this.setState({
-                listings: result.listings
-            });
-        }.bind(this));
-    }
-
     render() {
-            var rows = [];
-            this.state.listings.forEach(function(listing) {
-                rows.push(<ListingRow listing={listing} key={listing.booliId} />);
+        var rows = [];
+        this.props.listings.forEach((listing) => {
+            rows.push(<ListingRow listing={listing} key={listing.booliId} destination={this.props.destination}/>);
         });
 
         return (
@@ -85,6 +69,33 @@ class ListingsTable extends React.Component{
 }
 
 class KomuterApp extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            listings: [],
+            destination: ''
+        };
+
+        this.defaultBooliUrl = 'https://www.booli.se/soderort/914052/?objectType=Parhus%2CRadhus%2CKedjehus&rooms=4';
+        this.defaultWorkAddress = 'Sveavägen 44, Stockholm';
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleSubmit(event) {
+//        this.setState({
+//            listings: [],
+//            destination: ''
+//        });
+        var apiAddress = "api/listings?";
+        var request = apiAddress + this.booliUrl.value;
+        this.serverRequest = $.get(request, function(result) {
+            this.setState({
+                listings: result.listings,
+                destination: this.workAddress.value
+            });
+        }.bind(this));
+    }
+
     render() {
         return (
             <div>
@@ -92,11 +103,11 @@ class KomuterApp extends React.Component{
                     <div>
                         <div className="form-group">
                             <label>Booli URL: </label>
-                            <input id="booliUrl" className="form-control" type="text"/>
+                            <input type="text" className="form-control" defaultValue={this.defaultBooliUrl}  ref={(input) => this.booliUrl = input}/>
                         </div>
                         <div className="form-group">
                             <label>Work address: </label>
-                            <input type="text" className="form-control"/>
+                            <input type="text" className="form-control"  defaultValue={this.defaultWorkAddress}  ref={(input) => this.workAddress = input}/>
                         </div>
                         <div className="form-group btn-space">
                             <label>Transit type: </label><br/>
@@ -104,12 +115,12 @@ class KomuterApp extends React.Component{
                             </select>
                             </div>
                         <div className="form-group">
-                            <input className="btn btn-primary btn-space" type="button" value="Show listings"/>
+                            <input className="btn btn-primary btn-space" onClick={this.handleSubmit} type="button" value="Show listings"/>
                         </div>
                     </div>
                 </form>
                 <h3>Listings:</h3>
-                <ListingsTable/>
+                <ListingsTable listings={this.state.listings} destination={this.state.destination}/>
             </div>
         );
     }
