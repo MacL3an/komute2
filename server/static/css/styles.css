@@ -1,5 +1,5 @@
-.striped {
-    background-color:#f2f2f2;
+tbody tr:nth-child(odd) {
+  background: #f2f2f2;
 }
 .btn-space {
     margin-bottom: 5px;
