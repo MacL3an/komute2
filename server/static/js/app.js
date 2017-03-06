@@ -9,7 +9,8 @@ class DurationCell extends React.Component{
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.destination != this.props.destination) {
+        if (nextProps.destination !== this.props.destination ||
+            nextProps.transitType !== this.props.transitType) {
             this.getDuration(nextProps);
         }
         if (nextState.duration !== this.state.duration) {
@@ -51,7 +52,7 @@ class ListingRow extends React.Component{
                 <td>{rooms}</td>
                 <td>{size}</td>
                 <td>{price}</td>
-                {<DurationCell origin={origin} destination={this.props.destination} transitType="transit"/>}
+                {<DurationCell origin={origin} destination={this.props.destination} transitType={this.props.transitType}/>}
             </tr>
         );
     }
@@ -61,7 +62,8 @@ class ListingsTable extends React.Component{
     render() {
         var rows = [];
         this.props.listings.forEach((listing) => {
-            rows.push(<ListingRow listing={listing} key={listing.booliId} destination={this.props.destination}/>);
+            rows.push(<ListingRow listing={listing} key={listing.booliId}
+                destination={this.props.destination}  transitType={this.props.transitType}/>);
         });
 
         return (
@@ -86,7 +88,8 @@ class KomuterApp extends React.Component{
         super(props);
         this.state = {
             listings: [],
-            destination: ''
+            destination: '',
+            transitType: ''
         };
 
         this.defaultBooliUrl = 'https://www.booli.se/soderort/914052/?objectType=Parhus%2CRadhus%2CKedjehus&rooms=4';
@@ -100,7 +103,8 @@ class KomuterApp extends React.Component{
         this.serverRequest = $.get(request, function(result) {
             this.setState({
                 listings: result.listings,
-                destination: this.workAddress.value
+                destination: this.workAddress.value,
+                transitType: this.transitType.value
             });
         }.bind(this));
     }
@@ -116,12 +120,16 @@ class KomuterApp extends React.Component{
                         </div>
                         <div className="form-group">
                             <label>Work address: </label>
-                            <input type="text" className="form-control"  defaultValue={this.defaultWorkAddress}  ref={(input) => this.workAddress = input}/>
+                            <input type="text" className="form-control"  defaultValue={this.defaultWorkAddress} ref={(input) => this.workAddress = input}/>
                         </div>
                         <div className="form-group btn-space">
                             <label>Transit type: </label><br/>
-                            <select>
-                            </select>
+                              <select ref={(input) => this.transitType = input}>
+                                <option value="transit">Public Transport</option>
+                                <option value="bicycle">Bicycle</option>
+                                <option value="walking">Walking</option>
+                                <option value="driving">Car</option>
+                              </select>
                             </div>
                         <div className="form-group">
                             <input className="btn btn-primary btn-space" onClick={this.handleSubmit} type="button" value="Show listings"/>
@@ -129,7 +137,7 @@ class KomuterApp extends React.Component{
                     </div>
                 </form>
                 <h3>Listings:</h3>
-                <ListingsTable listings={this.state.listings} destination={this.state.destination}/>
+                <ListingsTable listings={this.state.listings} destination={this.state.destination} transitType={this.state.transitType}/>
             </div>
         );
     }
