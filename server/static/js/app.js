@@ -8,14 +8,27 @@ class DurationCell extends React.Component{
         };
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        if (nextProps.destination != this.props.destination) {
+            this.getDuration(nextProps);
+        }
+        if (nextState.duration !== this.state.duration) {
+            return true;
+        }
+        return false;
+    }
+
     componentDidMount() {
-        var url = '/api/duration?origin='+this.props.origin+'&destination='+this.props.destination+'&transitType='+this.props.transitType
-        var that = this;
+        this.getDuration(this.props);
+    }
+
+    getDuration(nextProps) {
+        var url = '/api/duration?origin='+nextProps.origin+'&destination='+nextProps.destination+'&transitType='+nextProps.transitType
         this.serverRequest = $.get(url, function(result) {
-            that.setState({
+            this.setState({
                 duration: result.duration
             });
-        });
+        }.bind(this));
     }
 
     render() {
@@ -82,10 +95,6 @@ class KomuterApp extends React.Component{
     }
 
     handleSubmit(event) {
-//        this.setState({
-//            listings: [],
-//            destination: ''
-//        });
         var apiAddress = "api/listings?";
         var request = apiAddress + this.booliUrl.value;
         this.serverRequest = $.get(request, function(result) {
