@@ -1,5 +1,6 @@
 'use strict'; //tells to compiler to not accept 'implicit' variables
 
+
 class DurationCell extends React.Component{
     constructor(props) {
         super(props);
@@ -7,6 +8,15 @@ class DurationCell extends React.Component{
             duration: ''
         };
     }
+
+    convertTime(input) {
+    var pad = function(input) {return input < 10 ? "0" + input : input;};
+    return [
+        pad(Math.floor(input / 3600)),
+        pad(Math.floor(input % 3600 / 60)),
+        pad(Math.floor(input % 60)),
+    ].join(':');
+}
 
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.destination !== this.props.destination ||
@@ -34,7 +44,7 @@ class DurationCell extends React.Component{
 
     render() {
         return (
-            <td>{this.state.duration}</td>
+            <td>{this.convertTime(this.state.duration)}</td>
         );
     }
 }
