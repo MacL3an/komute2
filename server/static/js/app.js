@@ -2,49 +2,18 @@
 
 
 class DurationCell extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-            duration: ''
-        };
-    }
-
     convertTime(input) {
-    var pad = function(input) {return input < 10 ? "0" + input : input;};
-    return [
-        pad(Math.floor(input / 3600)),
-        pad(Math.floor(input % 3600 / 60)),
-        pad(Math.floor(input % 60)),
-    ].join(':');
-}
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (nextProps.destination !== this.props.destination ||
-            nextProps.transitType !== this.props.transitType) {
-            this.getDuration(nextProps);
-        }
-        if (nextState.duration !== this.state.duration) {
-            return true;
-        }
-        return false;
-    }
-
-    componentDidMount() {
-        this.getDuration(this.props);
-    }
-
-    getDuration(nextProps) {
-        var url = '/api/duration?origin='+nextProps.origin+'&destination='+nextProps.destination+'&transitType='+nextProps.transitType
-        this.serverRequest = $.get(url, function(result) {
-            this.setState({
-                duration: result.duration
-            });
-        }.bind(this));
+        var pad = function(input) {return input < 10 ? "0" + input : input;};
+        return [
+            pad(Math.floor(input / 3600)),
+            pad(Math.floor(input % 3600 / 60)),
+            pad(Math.floor(input % 60)),
+        ].join(':');
     }
 
     render() {
         return (
-            <td>{this.convertTime(this.state.duration)}</td>
+            <td>{this.convertTime(this.props.duration)}</td>
         );
     }
 }
@@ -56,24 +25,54 @@ class ListingRow extends React.Component{
         var size = this.props.listing.livingArea;
         var price = this.props.listing.listPrice;
         var origin = this.props.listing.location.position.latitude + "," + this.props.listing.location.position.longitude;
+        var duration = this.props.listing.duration;
         return (
             <tr>
                 <td>{address}</td>
                 <td>{rooms}</td>
                 <td>{size}</td>
                 <td>{price}</td>
-                {<DurationCell origin={origin} destination={this.props.destination} transitType={this.props.transitType}/>}
+                {<DurationCell duration={duration}/>}
             </tr>
         );
     }
 }
 
 class ListingsTable extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            listingsWithDuration: [],
+        };
+    }
+
+    getDuration(listing, destination, transitType) {
+        var origin = listing.location.position.latitude + "," + listing.location.position.longitude;
+        var url = '/api/duration?origin='+origin+'&destination='+destination+'&transitType='+transitType
+        this.serverRequest = $.get(url, function(result) {
+            listing.duration = result.duration;
+            this.setState((prevState) => ({
+                listingsWithDuration: prevState.listingsWithDuration.concat([listing])
+            }));
+        }.bind(this));
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            listingsWithDuration: []
+        });
+        nextProps.listings.forEach((listing) => {
+            this.getDuration(listing, nextProps.destination, nextProps.transitType);
+        });
+    }
+
     render() {
         var rows = [];
-        this.props.listings.forEach((listing) => {
-            rows.push(<ListingRow listing={listing} key={listing.booliId}
-                destination={this.props.destination}  transitType={this.props.transitType}/>);
+        this.state.listingsWithDuration.sort((a,b) => {
+            return (a.duration > b.duration)
+        });
+        this.state.listingsWithDuration.forEach((listing) => {
+            rows.push(<ListingRow listing={listing} key={listing.booliId}/>);
         });
 
         return (
