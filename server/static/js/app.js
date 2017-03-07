@@ -46,6 +46,10 @@ class ListingsTable extends React.Component{
         };
     }
 
+    sortOnDuration(a,b) {
+        return (a.duration > b.duration);
+    }
+
     getDuration(listing, destination, transitType) {
         var origin = listing.location.position.latitude + "," + listing.location.position.longitude;
         var url = '/api/duration?origin='+origin+'&destination='+destination+'&transitType='+transitType
@@ -67,12 +71,8 @@ class ListingsTable extends React.Component{
     }
 
     render() {
-        var rows = [];
-        this.state.listingsWithDuration.sort((a,b) => {
-            return (a.duration > b.duration)
-        });
-        this.state.listingsWithDuration.forEach((listing) => {
-            rows.push(<ListingRow listing={listing} key={listing.booliId}/>);
+        var rows = this.state.listingsWithDuration.sort(this.sortOnDuration).map((listing) => {
+            return <ListingRow listing={listing} key={listing.booliId}/>
         });
 
         return (
