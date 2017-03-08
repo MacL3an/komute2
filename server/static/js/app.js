@@ -47,7 +47,7 @@ class ListingsTable extends React.Component{
     }
 
     sortOnDuration(a,b) {
-        return (a.duration > b.duration);
+        return (a.duration - b.duration);
     }
 
     getDuration(listing, destination, transitType) {
