@@ -36,9 +36,9 @@ class Komute2Server:
         self.app.run(host='0.0.0.0')
 
 if __name__ == "__main__":
-    #booli_getter = BooliGetter()
-    #duration_getter = GMDurationGetter()
-    booli_getter = DummyBooliGetter()
-    duration_getter = DummyDurationGetter()
+    booli_getter = BooliGetter()
+    duration_getter = GMDurationGetter()
+    # booli_getter = DummyBooliGetter()
+    # duration_getter = DummyDurationGetter()
     restfulServer = Komute2Server(booli_getter, duration_getter)
     restfulServer.start_server()

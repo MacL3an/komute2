@@ -21,6 +21,7 @@ class DurationCell extends React.Component{
 class ListingRow extends React.Component{
     render() {
         var address = this.props.listing.location.address.streetAddress;
+        var url = this.props.listing.url;
         var rooms = this.props.listing.rooms;
         var size = this.props.listing.livingArea;
         var price = this.props.listing.listPrice;
@@ -28,7 +29,7 @@ class ListingRow extends React.Component{
         var duration = this.props.listing.duration;
         return (
             <tr>
-                <td>{address}</td>
+                <td><a href={url} target="_blank">{address}</a></td>
                 <td>{rooms}</td>
                 <td>{size}</td>
                 <td>{price}</td>
